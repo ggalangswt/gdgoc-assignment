@@ -13,7 +13,7 @@ export default function NavbarLight() {
         {/* Logo */}
         <Link
           href="/"
-          className="text-2xl flex py-3 pr-20 font-medium tracking-tight text-[#252B42]"
+          className="text-2xl flex py-3 pr-20 font-semibold tracking-tight text-[#252B42]"
         >
           Bookstar
         </Link>
@@ -22,7 +22,7 @@ export default function NavbarLight() {
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className={`text-sm font-medium hover:text-[#2a2a2a] ${
+              className={`text-sm font-semibold hover:text-[#2a2a2a] ${
                 pathname === "/" ? "text-[#2a2a2a]" : "text-[#737373]"
               }`}
             >
