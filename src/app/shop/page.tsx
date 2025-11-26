@@ -1,4 +1,26 @@
 import Product from "@/modules/product";
+import ReadingList from "@/modules/reading";
+
+async function getBookById(bookId: string) {
+  try {
+    const res = await fetch(
+      `https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book/${bookId}`,
+      {
+        next: { revalidate: 0 },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch book");
+    }
+
+    const data = await res.json();
+    return data.data || data;
+  } catch (error) {
+    console.error("Error fetching book by ID:", error);
+    return null;
+  }
+}
 
 async function getRandomBook() {
   try {
@@ -50,8 +72,21 @@ async function getRandomBook() {
   }
 }
 
-export default async function ShopPage() {
-  const bookData = await getRandomBook();
+export default async function ShopPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bookId?: string }>;
+}) {
+  const params = await searchParams;
+  const bookId = params.bookId;
+
+  // Fetch book by ID if provided, otherwise get random book
+  let bookData;
+  if (bookId) {
+    bookData = await getBookById(bookId);
+  } else {
+    bookData = await getRandomBook();
+  }
 
   console.log("=== Received bookData ===");
   console.log(JSON.stringify(bookData, null, 2));
@@ -90,6 +125,7 @@ export default async function ShopPage() {
 
   // Transform API data to Product component format
   const productData = {
+    bookId: bookData?._id || "unknown",
     title: bookData?.title || "Unknown Title",
     price: priceNumber,
     availability: "In Stock" as const,
@@ -102,13 +138,19 @@ export default async function ShopPage() {
     author: bookData?.author?.name || undefined,
     buyLink: buyLink,
     images: bookData?.cover_image
-      ? [bookData.cover_image]
+      ? [
+          bookData.cover_image,
+          bookData.cover_image,
+          bookData.cover_image,
+          bookData.cover_image,
+        ]
       : ["/book-placeholder.jpg"],
   };
 
   return (
     <div className="min-h-screen bg-white">
       <Product {...productData} />
+      <ReadingList />
     </div>
   );
 }

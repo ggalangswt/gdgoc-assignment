@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import NavbarDark from "@/components/navbar-dark";
-import NavbarLight from "@/components/navbar-light";
-import Navigation from "@/components/navigation";
+import { WishlistProvider } from "@/contexts/wishlist-context";
+import NavbarWrapper from "@/components/navbar-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,16 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased relative`}
       >
-        <div className="fixed top-0 left-0 right-0 z-50">
-          <NavbarDark />
-          <NavbarLight />
-        </div>
-        <div className="pt-[116px]">
-          <Navigation />
-          {children}
-        </div>
+        <WishlistProvider>
+          <NavbarWrapper>{children}</NavbarWrapper>
+        </WishlistProvider>
       </body>
     </html>
   );

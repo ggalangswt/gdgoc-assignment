@@ -1,12 +1,19 @@
 "use client";
 
-import { Phone } from "lucide-react";
+import { Phone, X } from "lucide-react";
 import { FaInstagram, FaYoutube, FaFacebook, FaTwitter } from "react-icons/fa";
 import { BsEnvelope } from "react-icons/bs";
 
-export default function NavbarDark() {
+interface NavbarDarkProps {
+  isVisible: boolean;
+  onToggle: () => void;
+}
+
+export default function NavbarDark({ isVisible, onToggle }: NavbarDarkProps) {
+  if (!isVisible) return null;
+
   return (
-    <div className="bg-[#23856D] h-[58px] flex items-center">
+    <div className="bg-[#23856D] h-[58px] w-full flex items-center">
       <div className="w-full px-4 py-6 flex items-center gap-[30px] justify-center">
         {/* Left side - Contact Info */}
         <div className="flex items-center gap-2.5">
@@ -64,6 +71,13 @@ export default function NavbarDark() {
               <FaTwitter size={16} />
             </a>
           </div>
+          <button
+            onClick={onToggle}
+            className="ml-4 hover:opacity-80 transition-opacity"
+            aria-label="Close navbar"
+          >
+            <X size={16} />
+          </button>
         </div>
       </div>
     </div>

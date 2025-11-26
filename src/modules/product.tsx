@@ -6,6 +6,7 @@ import { Heart, ShoppingCart, Eye } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
+import { useWishlist } from "@/contexts/wishlist-context";
 
 // Import Swiper styles
 import "swiper/css";
@@ -14,6 +15,7 @@ import "swiper/css/pagination";
 import "swiper/css/thumbs";
 
 interface ProductProps {
+  bookId: string;
   title: string;
   price: number;
   availability: "In Stock" | "Out of Stock";
@@ -29,6 +31,7 @@ interface ProductProps {
 }
 
 export default function Product({
+  bookId,
   title,
   price,
   availability,
@@ -44,6 +47,9 @@ export default function Product({
 }: ProductProps) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+
+  const inWishlist = isInWishlist(bookId);
 
   const MAX_DESCRIPTION_LENGTH = 150;
   const shouldTruncate = description.length > MAX_DESCRIPTION_LENGTH;
@@ -74,18 +80,18 @@ export default function Product({
           {/* Left Section - Image Carousel */}
           <div className="space-y-4">
             {/* Main Image Swiper */}
-            <div className="relative bg-neutral-300 overflow-hidden">
+            <div className="relative bg-neutral-200 overflow-hidden z-0!">
               <Swiper
                 modules={[Navigation, Pagination, Thumbs]}
                 navigation
                 pagination={{ clickable: true }}
                 thumbs={{ swiper: thumbsSwiper }}
                 loop={true}
-                className="aspect-square"
+                className="aspect-square z-0!"
               >
                 {images.map((image, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="w-full h-full flex items-center justify-center p-8">
+                  <SwiperSlide className="z-2" key={index}>
+                    <div className="w-full h-full flex items-center z-0! justify-center p-8">
                       <Image
                         src={image}
                         alt={`${title} - Image ${index + 1}`}
@@ -210,7 +216,7 @@ export default function Product({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center gap-2.5 pt-10">
+            <div className="flex items-center gap-2.5 pt-6">
               <button
                 onClick={() =>
                   buyLink &&
@@ -222,12 +228,29 @@ export default function Product({
                 Buy Now
               </button>
               <button
-                className="flex p-2.5 bg-[#DBECFF] rounded-full hover:bg-[#AACBFF] hover:text-white transition-colors group"
-                aria-label="Add to wishlist"
+                onClick={() => {
+                  if (inWishlist) {
+                    removeFromWishlist(bookId);
+                  } else {
+                    addToWishlist(bookId);
+                  }
+                }}
+                className={`flex p-2.5 rounded-full transition-colors group ${
+                  inWishlist
+                    ? "bg-[#FF6B6B] hover:bg-[#FF5252]"
+                    : "bg-[#DBECFF] hover:bg-[#AACBFF]"
+                }`}
+                aria-label={
+                  inWishlist ? "Remove from wishlist" : "Add to wishlist"
+                }
               >
                 <Heart
                   size={20}
-                  className="text-[#252B42] group-hover:text-white"
+                  className={
+                    inWishlist
+                      ? "text-white fill-white"
+                      : "text-[#252B42] group-hover:text-white"
+                  }
                 />
               </button>
               <button

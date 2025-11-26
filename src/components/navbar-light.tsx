@@ -8,8 +8,8 @@ export default function NavbarLight() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-white h-[68px] flex items-center justify-center">
-      <div className="w-5xl mx-auto gap-10 flex items-center">
+    <nav className="bg-white h-[68px] w-full flex items-center justify-center">
+      <div className="max-w-5xl mx-auto gap-10 flex items-center">
         {/* Logo */}
         <Link
           href="/"
