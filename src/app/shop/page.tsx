@@ -17,8 +17,7 @@ async function getBookById(bookId: string) {
 
     const data = await res.json();
     return data.data || data;
-  } catch (error) {
-    console.error("Error fetching book by ID:", error);
+  } catch {
     return null;
   }
 }
@@ -33,29 +32,19 @@ async function getRandomBook() {
     );
 
     if (!res.ok) {
-      console.error("Response not OK:", res.status, res.statusText);
       throw new Error("Failed to fetch book");
     }
 
     const data = await res.json();
-    console.log("=== Full API Response ===");
-    console.log(JSON.stringify(data, null, 2));
-    console.log("=== data.data ===");
-    console.log(JSON.stringify(data.data, null, 2));
-    console.log("=== Type of data ===", typeof data);
-    console.log("=== Type of data.data ===", typeof data.data);
 
     if (data && data.data) {
-      console.log("Returning data.data");
       return data.data;
     } else if (data) {
-      console.log("Returning data directly");
       return data;
     }
 
     throw new Error("No data in response");
-  } catch (error) {
-    console.error("Error fetching book:", error);
+  } catch {
     return {
       title: "Beyond the Stars",
       price: 1139.33,
@@ -93,19 +82,9 @@ async function ProductContent({ bookId }: { bookId?: string }): Promise<{
     bookData = await getRandomBook();
   }
 
-  console.log("=== Received bookData ===");
-  console.log(JSON.stringify(bookData, null, 2));
-  console.log("=== Type ===", typeof bookData);
-
   if (!bookData || typeof bookData !== "object") {
-    console.log("BookData is invalid!");
     return null;
   }
-
-  console.log("=== Transforming data ===");
-  console.log("Title:", bookData?.title);
-  console.log("Price:", bookData?.details?.price);
-  console.log("Category:", bookData?.category?.name);
 
   const priceString = bookData?.details?.price || "Rp 0";
   const priceNumber = parseFloat(

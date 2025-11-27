@@ -39,8 +39,7 @@ export default function BooksForYou() {
               if (!res.ok) throw new Error("Failed to fetch book");
               const data = await res.json();
               return data.data || data;
-            } catch (error) {
-              console.error("Error fetching random book:", error);
+            } catch {
               return null;
             }
           });

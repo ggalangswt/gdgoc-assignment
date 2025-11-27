@@ -55,10 +55,8 @@ export default function ReadingList({
               );
               if (!res.ok) throw new Error("Failed to fetch book");
               const data = await res.json();
-              console.log("Fetched book data:", data);
               return data.data || data;
-            } catch (error) {
-              console.error(`Error fetching book ${bookId}:`, error);
+            } catch {
               return null;
             }
           })
@@ -67,10 +65,8 @@ export default function ReadingList({
         const validBooks = fetchedBooks.filter(
           (book): book is Book => book !== null
         );
-        console.log("Valid books:", validBooks);
         setBooks(validBooks);
-      } catch (error) {
-        console.error("Error fetching wishlist books:", error);
+      } catch {
       } finally {
         setIsLoading(false);
       }
@@ -93,13 +89,6 @@ export default function ReadingList({
           ? book.price
           : parseFloat(String(book.price));
     }
-
-    console.log(
-      "Parsing price for book:",
-      book.title,
-      "priceNumber:",
-      priceNumber
-    );
 
     const adjustedPrice = priceNumber;
     const originalPrice = adjustedPrice * 1.4;

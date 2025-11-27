@@ -26,9 +26,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
       if (saved) {
         try {
           return JSON.parse(saved);
-        } catch (error) {
-          console.error("Failed to parse wishlist:", error);
-        }
+        } catch {}
       }
     }
     return [];
