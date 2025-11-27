@@ -13,7 +13,7 @@ export default function NavbarDark({ isVisible, onToggle }: NavbarDarkProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="bg-[#23856D] h-[58px] w-full flex items-center">
+    <div className="bg-[#23856D] h-[58px] w-screen flex items-center">
       <div className="w-full px-4 py-6 flex items-center gap-[30px] justify-center">
         {/* Left side - Contact Info */}
         <div className="flex items-center gap-2.5">
@@ -22,19 +22,21 @@ export default function NavbarDark({ isVisible, onToggle }: NavbarDarkProps) {
             className="flex items-center text-sm justify-center p-2.5 gap-1 hover:opacity-80 transition-opacity"
           >
             <Phone size={16} />
-            <span>(225) 555-0118</span>
+            <span className="hidden md:inline">(225) 555-0118</span>
           </a>
           <a
             href="mailto:michelle.rivera@example.com"
             className="flex items-center text-sm justify-center p-2.5 gap-1 hover:opacity-80 transition-opacity"
           >
             <BsEnvelope size={16} />
-            <span>michelle.rivera@example.com</span>
+            <span className="hidden md:inline">
+              michelle.rivera@example.com
+            </span>
           </a>
         </div>
 
         {/* Center - Promotional Text */}
-        <div className="flex items-center font-medium text-sm p-2.5">
+        <div className="hidden md:flex items-center font-medium text-sm p-2.5">
           Follow Us and get a chance to win 80% off
         </div>
 

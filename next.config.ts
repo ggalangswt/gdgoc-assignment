@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
         pathname: "/data-gpu/images/**",
       },
     ],
+    dangerouslyAllowSVG: true,
+    unoptimized: process.env.NODE_ENV === "development",
   },
 };
 

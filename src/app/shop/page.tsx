@@ -1,5 +1,6 @@
-import Product from "@/modules/product";
-import ReadingList from "@/modules/reading";
+import { Suspense } from "react";
+import ProductSkeleton from "@/components/product-skeleton";
+import ClientModules from "@/components/client-modules";
 
 async function getBookById(bookId: string) {
   try {
@@ -44,7 +45,6 @@ async function getRandomBook() {
     console.log("=== Type of data ===", typeof data);
     console.log("=== Type of data.data ===", typeof data.data);
 
-    // Check if data exists in the response
     if (data && data.data) {
       console.log("Returning data.data");
       return data.data;
@@ -56,7 +56,6 @@ async function getRandomBook() {
     throw new Error("No data in response");
   } catch (error) {
     console.error("Error fetching book:", error);
-    // Return default data instead of null
     return {
       title: "Beyond the Stars",
       price: 1139.33,
@@ -72,15 +71,21 @@ async function getRandomBook() {
   }
 }
 
-export default async function ShopPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ bookId?: string }>;
-}) {
-  const params = await searchParams;
-  const bookId = params.bookId;
-
-  // Fetch book by ID if provided, otherwise get random book
+async function ProductContent({ bookId }: { bookId?: string }): Promise<{
+  bookId: string;
+  title: string;
+  price: number;
+  availability: "In Stock" | "Out of Stock";
+  tags: string[];
+  description: string;
+  pages: number;
+  publisher: string;
+  isbn: string;
+  published: string;
+  author?: string;
+  buyLink?: string;
+  images: string[];
+} | null> {
   let bookData;
   if (bookId) {
     bookData = await getBookById(bookId);
@@ -92,14 +97,9 @@ export default async function ShopPage({
   console.log(JSON.stringify(bookData, null, 2));
   console.log("=== Type ===", typeof bookData);
 
-  // Ensure bookData exists and has required properties
   if (!bookData || typeof bookData !== "object") {
     console.log("BookData is invalid!");
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <p>Failed to load book data</p>
-      </div>
-    );
+    return null;
   }
 
   console.log("=== Transforming data ===");
@@ -107,23 +107,18 @@ export default async function ShopPage({
   console.log("Price:", bookData?.details?.price);
   console.log("Category:", bookData?.category?.name);
 
-  // Parse price from string "Rp 48,000" to number
   const priceString = bookData?.details?.price || "Rp 0";
   const priceNumber = parseFloat(
     priceString.replace(/[^\d.-]/g, "").replace(/\./g, "")
   );
 
-  // Parse total pages from "16 pages" to number
   const pagesString = bookData?.details?.total_pages || "0 pages";
   const pagesNumber = parseInt(pagesString.replace(/\D/g, "")) || 0;
 
-  // Extract year from published_date "25 May 2022"
   const publishedDate = bookData?.details?.published_date || "";
 
-  // Get buy link from buy_links array
   const buyLink = bookData?.buy_links?.[0]?.url || undefined;
 
-  // Transform API data to Product component format
   const productData = {
     bookId: bookData?._id || "unknown",
     title: bookData?.title || "Unknown Title",
@@ -147,10 +142,23 @@ export default async function ShopPage({
       : ["/book-placeholder.jpg"],
   };
 
+  return productData;
+}
+
+export default async function ShopPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ bookId?: string }>;
+}) {
+  const params = await searchParams;
+  const bookId = params.bookId;
+  const productData = await ProductContent({ bookId });
+
   return (
     <div className="min-h-screen bg-white">
-      <Product {...productData} />
-      <ReadingList />
+      <Suspense fallback={<ProductSkeleton />}>
+        <ClientModules productData={productData || undefined} />
+      </Suspense>
     </div>
   );
 }

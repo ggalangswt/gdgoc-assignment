@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 export default function Navigation() {
   const pathname = usePathname();
 
-  // Mapping path ke nama yang user-friendly
   const getPageName = (path: string) => {
     const pathMap: { [key: string]: string } = {
       "/": "Home",
@@ -22,23 +21,21 @@ export default function Navigation() {
     );
   };
 
-  // Jika di home, tampilkan Home saja
   if (pathname === "/") {
     return (
       <div className="bg-[#FAFAFA] py-6">
-        <div className="w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-sm font-bold text-[#252B42]">Home</h2>
         </div>
       </div>
     );
   }
 
-  // Untuk page lain, tampilkan breadcrumb Home > PageName
   const currentPage = getPageName(pathname);
 
   return (
     <div className="bg-[#FAFAFA] py-6">
-      <div className="w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
           <Link
             href="/"

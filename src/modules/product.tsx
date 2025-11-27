@@ -8,7 +8,6 @@ import Image from "next/image";
 import type { Swiper as SwiperType } from "swiper";
 import { useWishlist } from "@/contexts/wishlist-context";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -76,11 +75,10 @@ export default function Product({
         }
       `}</style>
       <div className=" mx-auto pb-8 bg-[#FAFAFA]">
-        <div className="grid grid-cols-1 max-w-5xl mx-auto lg:grid-cols-2 gap-8">
-          {/* Left Section - Image Carousel */}
+        <div className="grid px-10 lg:px-0 grid-cols-1 max-w-5xl mx-auto lg:grid-cols-2 gap-8">
           <div className="space-y-4">
-            {/* Main Image Swiper */}
             <div className="relative bg-neutral-200 overflow-hidden z-0!">
+              \n{" "}
               <Swiper
                 modules={[Navigation, Pagination, Thumbs]}
                 navigation
@@ -105,7 +103,6 @@ export default function Product({
               </Swiper>
             </div>
 
-            {/* Thumbnail Swiper */}
             <Swiper
               modules={[Thumbs]}
               onSwiper={setThumbsSwiper}
@@ -130,9 +127,7 @@ export default function Product({
             </Swiper>
           </div>
 
-          {/* Right Section - Product Details */}
           <div className="space-y-2">
-            {/* Tags */}
             <div className="flex gap-4">
               {tags.map((tag, index) => (
                 <span
@@ -144,12 +139,10 @@ export default function Product({
               ))}
             </div>
 
-            {/* Title */}
             <h1 className="pt-4 text-3xl font-semibold text-[#252B42]">
               {title}
             </h1>
 
-            {/* Price */}
             <div className="text-xl font-semibold text-[#252B42]">
               Rp
               {price.toLocaleString("id-ID", {
@@ -158,7 +151,6 @@ export default function Product({
               })}
             </div>
 
-            {/* Availability */}
             <div className="flex items-center gap-2">
               <span className="text-base font-semibold text-[#737373]">
                 Availability :
@@ -174,7 +166,6 @@ export default function Product({
               </span>
             </div>
 
-            {/* Description */}
             <div className="pt-2">
               <p className="text-[#858585] leading-6">{displayDescription}</p>
               {shouldTruncate && (
@@ -189,7 +180,6 @@ export default function Product({
               )}
             </div>
 
-            {/* Additional Details */}
             <div className="space-y-2 text-sm text-[#737373] pt-2">
               {author && (
                 <div className="flex gap-2">
@@ -215,7 +205,6 @@ export default function Product({
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex items-center gap-2.5 pt-6">
               <button
                 onClick={() =>
